@@ -4,6 +4,7 @@ import com.web.entity.User;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 class UserDao {
 
@@ -11,7 +12,7 @@ class UserDao {
         return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/nest?useSSL=false&serverTimezone=Asia/Shanghai", "root", "sa");
     }
 
-    void getUser() throws SQLException {
+    List getUser() throws SQLException {
         var list = new ArrayList<User>();
 
         var sql = "SELECT * FROM auth_user";
@@ -30,7 +31,7 @@ class UserDao {
             user.setUpdatedAt(rs.getTimestamp("updatedAt"));
             list.add(user);
         }
-        System.out.println(list);
+        return list;
     }
 
     void addUser() throws SQLException {
