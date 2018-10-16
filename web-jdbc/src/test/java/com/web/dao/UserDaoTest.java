@@ -2,16 +2,9 @@ package com.web.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.junit.jupiter.api.*;
 
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -41,13 +34,8 @@ class UserDaoTest {
     void getUser() throws SQLException, JsonProcessingException {
         var userDao = new UserDao();
         List list = userDao.getUser();
-
-
         var mapper = new XmlMapper();
-
         String s1 = mapper.writeValueAsString(list);
-
-
         System.out.println(s1);
     }
 
@@ -60,48 +48,34 @@ class UserDaoTest {
     }
 
     @Test
-    void obj2xml() throws XMLStreamException, IOException {
-        XmlMapper mapper = new XmlMapper();
-
+    void domObj() throws JsonProcessingException {
         var time1 = System.currentTimeMillis();
-
-        StringWriter stringWriter = new StringWriter();
-        XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
-        XMLStreamWriter sw = xmlOutputFactory.createXMLStreamWriter(stringWriter);
-
-        sw.writeStartDocument();
-        sw.writeStartElement("root");
-
-        mapper.writeValue(sw, "a");
-        sw.writeEndElement();
-        sw.writeEndDocument();
-
-        stringWriter.toString();
-
+        var mapper = new XmlMapper();
+        var node = mapper.createObjectNode();
+        node.put("a", 1);
+        node.put("b", "");
         var time2 = System.currentTimeMillis();
-
+        System.out.println(node);
+        System.out.println(mapper.writeValueAsString(node));
         System.out.println(time2 - time1);
     }
 
     @Test
-    void dom() {
-        Document document = DocumentHelper.createDocument();
-        Element root = document.addElement("root");
-
+    void domXml() {
         var time1 = System.currentTimeMillis();
-
-        root.addElement("author").addCDATA("James Strachan");
-        root.addElement("author").addCDATA("Bob McWhirter");
-        root.addElement("author1").addCDATA("Bob McWhirter");
-        root.addElement("author2").addCDATA("Bob McWhirter");
-        root.addElement("author3").addCDATA("Bob McWhirter");
-        root.addElement("author4").addCDATA("Bob McWhirter");
-        root.addElement("author5").addCDATA("Bob McWhirter");
-        root.addElement("author6").addCDATA("Bob McWhirter");
-        document.getRootElement().asXML();
-
+        var document = DocumentHelper.createDocument();
+        var root = document.addElement("root");
+        root.addElement("author").addCDATA(String.valueOf(Math.random()));
+        root.addElement("author").addCDATA(String.valueOf(Math.random()));
+        root.addElement("author1").addCDATA(String.valueOf(Math.random()));
+        root.addElement("author2").addCDATA(String.valueOf(Math.random()));
+        root.addElement("author3").addCDATA(String.valueOf(Math.random()));
+        root.addElement("author4").addCDATA(String.valueOf(Math.random()));
+        root.addElement("author5").addCDATA(String.valueOf(Math.random()));
+        root.addElement("author6").addCDATA(String.valueOf(Math.random()));
         var time2 = System.currentTimeMillis();
-
+        System.out.println(document.asXML());
         System.out.println(time2 - time1);
     }
+
 }
