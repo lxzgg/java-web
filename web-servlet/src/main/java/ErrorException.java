@@ -4,7 +4,7 @@ class ErrorException extends RuntimeException {
         this.message = message;
     }
 
-    ErrorException(ErrorCodeEnum errorCodeEnum) {
+    ErrorException(ErrorEnum errorCodeEnum) {
         this.code = errorCodeEnum.getCode();
         this.message = errorCodeEnum.getMessage();
     }

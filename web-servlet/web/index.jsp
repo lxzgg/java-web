@@ -9,6 +9,6 @@
     <title>Document</title>
 </head>
 <body>
-哈哈
+index
 </body>
 </html>

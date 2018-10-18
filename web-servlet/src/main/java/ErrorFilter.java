@@ -6,8 +6,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(filterName = "ExceptionFilter")
-public class ExceptionFilter implements Filter {
+@WebFilter(filterName = "ErrorFilter")
+public class ErrorFilter implements Filter {
 
     private static ObjectMapper mapper = new ObjectMapper();
 
@@ -17,16 +17,17 @@ public class ExceptionFilter implements Filter {
         try {
             chain.doFilter(req, resp);
         } catch (ErrorException e) {
+            response.reset();
             ObjectNode node = mapper.createObjectNode();
             node.put("code", e.getCode());
             node.put("message", e.getMessage());
 
             response.setContentType("application/json;charset=UTF-8");
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.addDateHeader("X-Response-Time", System.currentTimeMillis() - startTime);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write(node.toString());
         }
-        var endTime = System.currentTimeMillis();
-        response.addHeader("X-Response-Time", String.valueOf(endTime - startTime));
+
     }
 
 }

@@ -1,12 +1,18 @@
 package com.web.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.web.entity.User;
 import org.dom4j.DocumentHelper;
 import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.StringJoiner;
+import java.util.TreeMap;
 
 class UserDaoTest {
 
@@ -78,4 +84,69 @@ class UserDaoTest {
         System.out.println(time2 - time1);
     }
 
+    @Test
+    void lombok() {
+        var user = new User();
+        user.setName(String.valueOf(Math.random()));
+        user.setUsername(String.valueOf(Math.random()));
+        user.setPassword(String.valueOf(Math.random()));
+        user.setMobile(String.valueOf(Math.random()));
+        user.setEmail(String.valueOf(Math.random()));
+        user.setStatus(true);
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        System.out.println(user);
+    }
+
+    @Test
+    void stringbuilder() {
+        long beginTime1 = System.currentTimeMillis();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 100000; i++) {
+            sb.append(i);
+        }
+        System.out.println(System.currentTimeMillis() - beginTime1);
+    }
+
+    @Test
+    void stringJoin() {
+        long beginTime = System.currentTimeMillis();
+        StringJoiner sj = new StringJoiner("");
+        for (int i = 0; i < 100000; i++) {
+            sj.add(String.valueOf(i));
+        }
+        System.out.println(System.currentTimeMillis() - beginTime);
+    }
+
+    @Test
+    void join() {
+        StringJoiner s = new StringJoiner("&");
+        s.add("a=1").add("b=2").add("c=3");
+        System.out.println(s);
+    }
+
+    @Test
+    void map() throws JsonProcessingException {
+        var objectMapper = new ObjectMapper();
+        objectMapper.writeValueAsString("");
+
+        long beginTime = System.currentTimeMillis();
+        SortedMap<String, String> map = new TreeMap<>();
+        map.put("c", "1");
+        map.put("2", "1");
+        map.put("a", "1");
+        map.put("bb", "1");
+        map.put("b", "1");
+        map.put("b1", "2");
+
+        String s = objectMapper.writeValueAsString(map);
+        System.out.println(System.currentTimeMillis() - beginTime);
+        System.out.println(s);
+
+        map.forEach((s1, s2) -> {
+            System.out.println(s1);
+            System.out.println(s2);
+        });
+
+    }
 }
