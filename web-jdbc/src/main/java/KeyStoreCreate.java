@@ -1,22 +1,14 @@
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.Date;
-
-import sun.security.tools.keytool.CertAndKeyGen;
-import sun.security.x509.X500Name;
 
 /**
  * 主要用于创建keyStore文件，保存起来
  *
  * @author Xia
- *
  */
 public class KeyStoreCreate {
     private static String filePath = "d:/key.keystore";
@@ -37,19 +29,19 @@ public class KeyStoreCreate {
 //            char[] password = "123456".toCharArray();
             ks.load(null, null);
 
-            CertAndKeyGen keypair = new CertAndKeyGen("RSA", "SHA1WithRSA", null);
-            X500Name x500Name = new X500Name(commonName, organizationalUnit, organization, city, state, country);
-            keypair.generate(keysize);
-
-            PrivateKey privateKey = keypair.getPrivateKey();
-            X509Certificate[] chain = new X509Certificate[1];
-            chain[0] = keypair.getSelfCertificate(x500Name, new Date(), (long)validity*24*60*60);
-            // store away the key store
-            FileOutputStream fos = new FileOutputStream(filePath);
-            ks.setKeyEntry(alias, privateKey, keyPassword, chain);
-            ks.store(fos, keyPassword);
-            fos.close();
-            System.out.println("create Success");
+//            CertAndKeyGen keypair = new CertAndKeyGen("RSA", "SHA1WithRSA", null);
+//            X500Name x500Name = new X500Name(commonName, organizationalUnit, organization, city, state, country);
+//            keypair.generate(keysize);
+//
+//            PrivateKey privateKey = keypair.getPrivateKey();
+//            X509Certificate[] chain = new X509Certificate[1];
+//            chain[0] = keypair.getSelfCertificate(x500Name, new Date(), (long)validity*24*60*60);
+//            // store away the key store
+//            FileOutputStream fos = new FileOutputStream(filePath);
+//            ks.setKeyEntry(alias, privateKey, keyPassword, chain);
+//            ks.store(fos, keyPassword);
+//            fos.close();
+//            System.out.println("create Success");
         } catch (KeyStoreException | NoSuchAlgorithmException | IOException | CertificateException e) {
             e.printStackTrace();
         }

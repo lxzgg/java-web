@@ -1,4 +1,4 @@
-package com.web.dao;
+package com.web.utils;
 
 import org.junit.jupiter.api.Test;
 

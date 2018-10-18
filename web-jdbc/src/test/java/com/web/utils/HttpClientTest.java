@@ -1,4 +1,4 @@
-package com.web.dao;
+package com.web.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
