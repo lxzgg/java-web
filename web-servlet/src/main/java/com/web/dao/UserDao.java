@@ -53,8 +53,8 @@ class UserDao {
         statement.setString(4, user.getMobile());
         statement.setString(5, user.getEmail());
         statement.setBoolean(6, user.getStatus());
-        statement.setTimestamp(7, user.getCreatedAt());
-        statement.setTimestamp(8, user.getUpdatedAt());
+        statement.setTimestamp(7, new Timestamp(user.getCreatedAt().getTime()));
+        statement.setTimestamp(8, new Timestamp(user.getUpdatedAt().getTime()));
         statement.executeUpdate();
 
         var rs = statement.getGeneratedKeys();
