@@ -17,10 +17,12 @@ import java.util.Map;
 /**
  * 返回值处理
  */
-@ControllerAdvice
-public class ResultResponseBodyAdvice implements ResponseBodyAdvice {
+@ControllerAdvice("com.web.controller")
+public class ResultHandle implements ResponseBodyAdvice {
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
+        System.out.println(returnType);
+        System.out.println(converterType);
         System.out.println("处理返回值");
         return true;
     }
