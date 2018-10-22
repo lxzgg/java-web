@@ -1,6 +1,6 @@
 package com.web.service;
 
-import com.web.utils.ErrorException;
+import com.web.common.ErrorException;
 import org.springframework.stereotype.Service;
 
 @Service

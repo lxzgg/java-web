@@ -1,6 +1,5 @@
 package com.web.common;
 
-import com.web.utils.ErrorException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -10,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 异常处理
+ */
 @RestControllerAdvice
 public class ExceptionHandle {
 

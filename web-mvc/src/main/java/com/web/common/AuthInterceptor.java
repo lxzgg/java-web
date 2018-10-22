@@ -7,6 +7,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 拦截器
+ */
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 

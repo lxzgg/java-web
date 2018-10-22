@@ -1,5 +1,6 @@
 package com.web.utils;
 
+import com.web.common.ErrorException;
 import org.hibernate.validator.HibernateValidator;
 
 import javax.validation.ConstraintViolation;

@@ -12,7 +12,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.Map;
 
+/**
+ * 返回值处理
+ */
 @ControllerAdvice
 public class ResultResponseBodyAdvice implements ResponseBodyAdvice {
     @Override
@@ -22,11 +26,11 @@ public class ResultResponseBodyAdvice implements ResponseBodyAdvice {
     }
 
     @Override
-    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+    public Map beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         HttpServletResponse resp = ((ServletServerHttpResponse) response).getServletResponse();
         HttpServletRequest req = ((ServletServerHttpRequest) request).getServletRequest();
         long time = (long) req.getAttribute("X-Response-Time");
-        HashMap<Object, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("code", 0);
         map.put("message", "success");
         map.put("data", body);

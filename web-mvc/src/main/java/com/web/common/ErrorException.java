@@ -1,4 +1,4 @@
-package com.web.utils;
+package com.web.common;
 
 /**
  * 自定义错误异常
