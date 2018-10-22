@@ -1,22 +1,22 @@
 package com.web.controller;
 
-import com.web.common.ErrorException;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 public class AdminController {
 
-    @GetMapping("index")
+    @GetMapping("home")
     public ModelAndView getAdmin() {
-        ModelAndView view = new ModelAndView("home");
-        view.addObject("a", "666");
-        return view;
+        Map<String, String> map = new HashMap<>();
+        map.put("a", "a");
+        map.put("b", "b");
+        return new ModelAndView("home", map);
     }
 
     @GetMapping("/go")

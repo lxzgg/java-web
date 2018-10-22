@@ -13,5 +13,6 @@
 <body>
 <p>home</p>
 ${a}
+${b}
 </body>
 </html>

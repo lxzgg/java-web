@@ -28,7 +28,7 @@ public class ResultHandle implements ResponseBodyAdvice {
     }
 
     @Override
-    public Map beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         HttpServletResponse resp = ((ServletServerHttpResponse) response).getServletResponse();
         HttpServletRequest req = ((ServletServerHttpRequest) request).getServletRequest();
         long time = (long) req.getAttribute("X-Response-Time");
@@ -37,6 +37,6 @@ public class ResultHandle implements ResponseBodyAdvice {
         map.put("message", "success");
         map.put("data", body);
         resp.setHeader("X-Response-Time", String.valueOf(System.currentTimeMillis() - time + "ms"));
-        return map;
+        return body;
     }
 }
