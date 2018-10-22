@@ -1,22 +1,29 @@
 package com.web.controller;
 
-import com.web.utils.ValidationUtil;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 public class AdminController {
 
-    @GetMapping("go")
-    public Map<Object, Object> getAdmin() {
-        Map<Object, Object> map = new HashMap<>();
-        map.put("a", 1);
-        map.put("b", "2");
-        ValidationUtil.validator(map);
-        return map;
+    @GetMapping("index")
+    public ModelAndView getAdmin() {
+        ModelAndView view = new ModelAndView("redirect:index.jsp");
+        view.addObject("a", "a");
+        return view;
     }
 
+    @GetMapping("go")
+    @ResponseBody
+    public Map<String, Object> getUser() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("a", 1);
+        map.put("b", "2");
+        return map;
+    }
 }
