@@ -1,11 +1,16 @@
 package com.web;
 
+import com.web.config.RootConfig;
+import com.web.config.WebConfig;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.Filter;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletRegistration;
+import java.io.File;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -37,5 +42,11 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         source.registerCorsConfiguration("/**", config);
 
         return new Filter[]{new CorsFilter(source)};
+    }
+
+    @Override
+    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+        new File("C:/temp").mkdir();
+        registration.setMultipartConfig(new MultipartConfigElement("C:/temp"));
     }
 }

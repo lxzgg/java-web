@@ -21,14 +21,12 @@ import java.util.Map;
 public class ResultHandle implements ResponseBodyAdvice {
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
-        System.out.println(returnType);
-        System.out.println(converterType);
         System.out.println("处理返回值");
         return true;
     }
 
     @Override
-    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+    public Map beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         HttpServletResponse resp = ((ServletServerHttpResponse) response).getServletResponse();
         HttpServletRequest req = ((ServletServerHttpRequest) request).getServletRequest();
         long time = (long) req.getAttribute("X-Response-Time");
@@ -37,6 +35,6 @@ public class ResultHandle implements ResponseBodyAdvice {
         map.put("message", "success");
         map.put("data", body);
         resp.setHeader("X-Response-Time", String.valueOf(System.currentTimeMillis() - time + "ms"));
-        return body;
+        return map;
     }
 }
