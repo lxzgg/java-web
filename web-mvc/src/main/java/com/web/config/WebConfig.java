@@ -4,6 +4,8 @@ import com.web.common.AuthInterceptor;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.*;
@@ -17,7 +19,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        //当DisptacherServlet接收到了他匹配的请求，但是找不到相应的Controller，就会把这个请求返回给默认的处理（比如交给tomcat处理）
         configurer.enable();
     }
 
@@ -47,4 +48,10 @@ public class WebConfig implements WebMvcConfigurer {
         configurer.ignoreAcceptHeader(true);
         configurer.defaultContentType(MediaType.TEXT_HTML, MediaType.APPLICATION_JSON_UTF8);
     }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new DateFormatter());
+    }
+
 }

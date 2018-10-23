@@ -1,13 +1,13 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
 <body>
-<form name="Form2" action="/file" method="post" enctype="multipart/form-data">
-    <h1>使用spring mvc提供的类的方法上传文件</h1>
-    <input type="file" name="file" multiple>
-    <input type="submit" value="upload"/>
-</form>
+<%=application.getAttribute("ctx")%>
 </body>
 </html>
