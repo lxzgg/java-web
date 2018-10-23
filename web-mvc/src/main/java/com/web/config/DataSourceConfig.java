@@ -5,10 +5,12 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import javax.sql.DataSource;
 
 @Configuration
+@PropertySource("classpath:jdbc.properties")
 public class DataSourceConfig {
 
     @Value("${spring.datasource.url}")
@@ -39,4 +41,5 @@ public class DataSourceConfig {
         config.addDataSourceProperty("maintainTimeStats", "false");
         return new HikariDataSource(config);
     }
+
 }
