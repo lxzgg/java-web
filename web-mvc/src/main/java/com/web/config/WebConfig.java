@@ -8,13 +8,14 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+@Configuration
 @EnableWebMvc
 @EnableAspectJAutoProxy
-@ComponentScan(basePackages = "com.web.controller", useDefaultFilters = false, includeFilters = {@ComponentScan.Filter(Controller.class)})
-@Configuration
+@ComponentScan(basePackages = "com.web.controller", useDefaultFilters = false, includeFilters = {@ComponentScan.Filter(Controller.class), @ComponentScan.Filter(RestController.class)})
 public class WebConfig implements WebMvcConfigurer {
 
     @Override

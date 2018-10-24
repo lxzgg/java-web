@@ -1,5 +1,8 @@
 package com.web.controller;
 
+import com.web.entity.User;
+import com.web.service.AdminService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,10 +14,14 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 public class AdminController {
+
+    @Autowired
+    private AdminService adminService;
 
     @GetMapping("home")
     public ModelAndView getAdmin() {
@@ -36,14 +43,15 @@ public class AdminController {
 
     @GetMapping("/go")
     @ResponseBody
-    public Map<String, Object> getUser() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("a", 1);
-        map.put("b", "2");
-//        if (map.size() > 0) {
-//            throw new ErrorException(ErrorException.ErrorEnum.parameter_error);
-//        }
-        return map;
+    public List<User> getUser() {
+        return adminService.getAdmin();
+    }
+
+
+    @GetMapping("/insert")
+    @ResponseBody
+    public User insert() {
+        return adminService.insert();
     }
 
     @GetMapping("/404")
