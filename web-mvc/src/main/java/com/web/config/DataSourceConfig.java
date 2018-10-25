@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,15 +32,15 @@ public class DataSourceConfig {
     @Value("${spring.datasource.password}")
     private String password;
 
-    @Value("${mybatis.type-aliases-package}")
+    @Value("${mybatis.type-aliases-package:com.web.entity}")
     private String typeAliasesPackage;
 
-    @Value("${mybatis.mapperLocations}")
+    @Value("${mybatis.mapperLocations:classpath:com/web/mapper/*.xml}")
     private String mapperLocations;
 
-    @Bean(destroyMethod = "close")
     @Primary
-    public HikariDataSource dataSource() {
+    @Bean(name = "hikariDataSource", destroyMethod = "close")
+    public HikariDataSource hikariDataSource() {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("com.mysql.cj.jdbc.Driver");
         config.setJdbcUrl(jdbcUrl); //数据源
@@ -61,9 +62,9 @@ public class DataSourceConfig {
     /**
      * 配置mybatis的SqlSessionFactoryBean
      */
-    @Bean
     @Primary
-    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+    @Bean(name = "hikariSqlSessionFactory")
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("hikariDataSource") DataSource dataSource) throws Exception {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource);
@@ -75,9 +76,9 @@ public class DataSourceConfig {
     /**
      * 配置事务管理器
      */
-    @Bean
     @Primary
-    public DataSourceTransactionManager transactionManager(DataSource dataSource) {
+    @Bean("tx1")
+    public DataSourceTransactionManager transactionManager(@Qualifier("hikariDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 

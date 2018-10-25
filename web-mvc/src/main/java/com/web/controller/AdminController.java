@@ -2,6 +2,8 @@ package com.web.controller;
 
 import com.web.entity.User;
 import com.web.service.AdminService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,8 @@ import java.util.Map;
 
 @Controller
 public class AdminController {
+
+    private static final Logger log = LoggerFactory.getLogger(AdminController.class);
 
     @Autowired
     private AdminService adminService;
@@ -44,6 +48,10 @@ public class AdminController {
     @GetMapping("/go")
     @ResponseBody
     public List<User> getUser() {
+        log.info("info...");
+        log.debug("debug...");
+        log.warn("warn...");
+        log.error("哈哈...");
         return adminService.getAdmin();
     }
 

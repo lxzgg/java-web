@@ -2,7 +2,7 @@ package com.web;
 
 import com.web.config.RootConfig;
 import com.web.config.WebConfig;
-import com.web.service.AdminService;
+import com.web.service.impl.AdminServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 class WebAppInitializerTest {
 
     @Autowired
-    private AdminService adminService;
+    private AdminServiceImpl adminServiceImpl;
 
     @Test
     void runTest() {
-        adminService.getAdmin();
+        adminServiceImpl.getAdmin();
     }
 }

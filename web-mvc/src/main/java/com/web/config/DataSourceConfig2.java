@@ -9,10 +9,7 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -21,7 +18,7 @@ import java.sql.SQLException;
 
 @Configuration
 @PropertySource("classpath:application.properties")
-@MapperScan(value = "com.web.mapper2", sqlSessionFactoryRef = "sqlSessionFactory2")
+@MapperScan(value = "com.web.mapper2", sqlSessionFactoryRef = "druidSqlSessionFactory")
 public class DataSourceConfig2 {
 
     @Value("${spring.datasource.druid.url}")
@@ -33,14 +30,14 @@ public class DataSourceConfig2 {
     @Value("${spring.datasource.druid.password}")
     private String password;
 
-    @Value("${mybatis.type-aliases-package}")
+    @Value("${mybatis.type-aliases-package:com.web.entity}")
     private String typeAliasesPackage;
 
-    @Value("${mybatis.mapperLocations2}")
+    @Value("${mybatis.mapperLocations2:classpath:com/web/mapper2/*.xml}")
     private String mapperLocations;
 
-    @Bean(name = "dataSource2", initMethod = "init", destroyMethod = "close")
-    public DruidDataSource dataSource() throws SQLException {
+    @Bean(name = "druidDataSource", initMethod = "init", destroyMethod = "close")
+    public DruidDataSource druidDataSource() throws SQLException {
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl(url);
@@ -51,8 +48,8 @@ public class DataSourceConfig2 {
         return dataSource;
     }
 
-    @Bean("sqlSessionFactory2")
-    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource2") DataSource dataSource) throws Exception {
+    @Bean("druidSqlSessionFactory")
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("druidDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         factoryBean.setDataSource(dataSource);
@@ -65,7 +62,7 @@ public class DataSourceConfig2 {
      * 配置事务管理器
      */
     @Bean("tx2")
-    public DataSourceTransactionManager transactionManager(@Qualifier("dataSource2") DataSource dataSource) {
+    public DataSourceTransactionManager transactionManager(@Qualifier("druidDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
@@ -75,10 +72,10 @@ public class DataSourceConfig2 {
     }
 
     @Bean
-    @Scope("prototype")
+    @Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public JdkRegexpMethodPointcut jdkRegexpMethodPointcut() {
         JdkRegexpMethodPointcut pointcut = new JdkRegexpMethodPointcut();
-        pointcut.setPatterns("com.web.controller.*", "com.web.service.*", "com.web.mapper.*", "com.web.mapper2.*");
+        pointcut.setPatterns("com.web.controller.*", "com.web.service.*");
         return pointcut;
     }
 

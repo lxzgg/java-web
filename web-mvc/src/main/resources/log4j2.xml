@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <!--全局参数-->
+    <properties>
+        <property name="output_pattern">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} %5p %class{1} --- [%t] %-40.40logger{39} : %m%n
+        </property>
+    </properties>
+
+    <Appenders>
+        <File name="file" fileName="logs/log.log" immediateFlush="false" append="false">
+            <PatternLayout pattern="${sys:output_pattern}"/>
+        </File>
+        <Console name="console">
+            <PatternLayout pattern="${sys:output_pattern}"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!--单独设置包级别,继承root-->
+        <logger name="com.web.controller" level="ERROR"/>
+        <Root level="info">
+            <AppenderRef ref="file"/>
+            <AppenderRef ref="console"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

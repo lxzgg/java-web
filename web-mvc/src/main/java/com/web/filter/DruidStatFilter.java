@@ -7,7 +7,7 @@ import javax.servlet.annotation.WebInitParam;
 
 @WebFilter(urlPatterns = "/*", initParams = {
         /** 忽略资源 */
-        @WebInitParam(name = "exclusions", value = "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"),
+        @WebInitParam(name = "exclusions", value = "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid,/druid/*"),
         /** 会话统计最大数,默认1000 */
         @WebInitParam(name = "sessionStatMaxCount", value = "2000"),
         /** 监控当前COOKIE的用户,value为cookieName */
