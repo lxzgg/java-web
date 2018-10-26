@@ -48,10 +48,12 @@ public class AdminController {
     @GetMapping("/go")
     @ResponseBody
     public List<User> getUser() {
-        log.info("info...");
+        log.trace("trace...");
         log.debug("debug...");
+        log.info("呵呵info...");
         log.warn("warn...");
-        log.error("哈哈...");
+        log.error("哈哈error...");
+
         return adminService.getAdmin();
     }
 
