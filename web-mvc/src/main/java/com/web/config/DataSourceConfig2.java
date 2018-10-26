@@ -1,57 +1,69 @@
 package com.web.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.aop.support.JdkRegexpMethodPointcut;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 
 @Configuration
 @PropertySource("classpath:application.properties")
-@MapperScan(value = "com.web.mapper2", sqlSessionFactoryRef = "druidSqlSessionFactory")
+@MapperScan(value = "com.web.mapper", sqlSessionFactoryRef = "hikariSqlSessionFactory")
+@EnableTransactionManagement
 public class DataSourceConfig2 {
 
-    @Value("${spring.datasource.druid.url}")
-    private String url;
+    @Value("${spring.datasource.url}")
+    private String jdbcUrl;
 
-    @Value("${spring.datasource.druid.username}")
+    @Value("${spring.datasource.username}")
     private String username;
 
-    @Value("${spring.datasource.druid.password}")
+    @Value("${spring.datasource.password}")
     private String password;
 
     @Value("${mybatis.type-aliases-package:com.web.entity}")
     private String typeAliasesPackage;
 
-    @Value("${mybatis.mapperLocations2:classpath:com/web/mapper2/*.xml}")
+    @Value("${mybatis.mapperLocations:classpath:com/web/mapper/*.xml}")
     private String mapperLocations;
 
-    @Bean(name = "druidDataSource", initMethod = "init", destroyMethod = "close")
-    public DruidDataSource druidDataSource() throws SQLException {
-        DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl(url);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
-        // stat是统计SQL，wall是SQL防火墙，防SQL注入的，log4j是用来输出统计数据的
-        dataSource.setFilters("stat,wall");
-        return dataSource;
+    @Bean(name = "hikariDataSource", destroyMethod = "close")
+    public HikariDataSource hikariDataSource() {
+        HikariConfig config = new HikariConfig();
+        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        config.setJdbcUrl(jdbcUrl); //数据源
+        config.setUsername(username); //用户名
+        config.setPassword(password); //密码
+        config.addDataSourceProperty("cachePrepStmts", true);
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("useServerPrepStmts", true);
+        config.addDataSourceProperty("useLocalSessionState", true);
+        config.addDataSourceProperty("rewriteBatchedStatements", true);
+        config.addDataSourceProperty("cacheResultSetMetadata", true);
+        config.addDataSourceProperty("cacheServerConfiguration", true);
+        config.addDataSourceProperty("elideSetAutoCommits", true);
+        config.addDataSourceProperty("maintainTimeStats", false);
+        return new HikariDataSource(config);
     }
 
-    @Bean("druidSqlSessionFactory")
-    public SqlSessionFactory sqlSessionFactory(@Qualifier("druidDataSource") DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+    /**
+     * 配置mybatis的SqlSessionFactoryBean
+     */
+    @Bean(name = "hikariSqlSessionFactory")
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("hikariDataSource") DataSource dataSource) throws Exception {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource);
         factoryBean.setTypeAliasesPackage(typeAliasesPackage);
         factoryBean.setMapperLocations(resolver.getResources(mapperLocations));
@@ -61,30 +73,9 @@ public class DataSourceConfig2 {
     /**
      * 配置事务管理器
      */
-    @Bean("tx2")
-    public DataSourceTransactionManager transactionManager(@Qualifier("druidDataSource") DataSource dataSource) {
+    @Bean("txManager2")
+    public DataSourceTransactionManager transactionManager(@Qualifier("hikariDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
-    }
-
-    @Bean
-    public DruidStatInterceptor DruidStatInterceptor() {
-        return new DruidStatInterceptor();
-    }
-
-    @Bean
-    @Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public JdkRegexpMethodPointcut jdkRegexpMethodPointcut() {
-        JdkRegexpMethodPointcut pointcut = new JdkRegexpMethodPointcut();
-        pointcut.setPatterns("com.web.controller.*", "com.web.service.*");
-        return pointcut;
-    }
-
-    @Bean
-    public DefaultPointcutAdvisor druidStatAdvisor(DruidStatInterceptor druidStatInterceptor, JdkRegexpMethodPointcut druidStatPointcut) {
-        DefaultPointcutAdvisor defaultPointAdvisor = new DefaultPointcutAdvisor();
-        defaultPointAdvisor.setPointcut(druidStatPointcut);
-        defaultPointAdvisor.setAdvice(druidStatInterceptor);
-        return defaultPointAdvisor;
     }
 
 }

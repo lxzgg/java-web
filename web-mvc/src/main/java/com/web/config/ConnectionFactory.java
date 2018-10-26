@@ -37,7 +37,7 @@ public class ConnectionFactory {
         dataSource = new HikariDataSource(config);
     }
 
-    public static Connection getDatabaseConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException {
         return Singleton.INSTANCE.dataSource.getConnection();
     }
 

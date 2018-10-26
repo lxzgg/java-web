@@ -6,13 +6,11 @@ import com.web.mapper2.UserMapper2;
 import com.web.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-@Transactional("tx2")
 public class AdminServiceImpl implements AdminService {
 
     @Autowired
@@ -20,7 +18,7 @@ public class AdminServiceImpl implements AdminService {
 
 
     public List<User> getAdmin() {
-        return userMapper.findAll();
+        return userMapper.getAdmin();
     }
 
     public User insert() {
