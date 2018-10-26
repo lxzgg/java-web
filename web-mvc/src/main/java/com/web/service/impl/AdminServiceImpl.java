@@ -18,6 +18,7 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private UserMapper2 userMapper;
 
+
     public List<User> getAdmin() {
         return userMapper.findAll();
     }
