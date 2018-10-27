@@ -18,8 +18,8 @@ import java.sql.SQLException;
 
 @Configuration
 @PropertySource("classpath:application.properties")
-@MapperScan(value = "com.web.mapper2", sqlSessionFactoryRef = "druidSqlSessionFactory")
-public class DataSourceConfig1 {
+@MapperScan(value = "com.*.mapper", sqlSessionFactoryRef = "druidSqlSessionFactory")
+public class DataSourceConfig {
 
     @Value("${spring.datasource.druid.url}")
     private String url;
@@ -30,10 +30,10 @@ public class DataSourceConfig1 {
     @Value("${spring.datasource.druid.password}")
     private String password;
 
-    @Value("${mybatis.type-aliases-package:com.web.entity}")
-    private String typeAliasesPackage;
+    @Value("${mybatis.type-aliases-package:com.*.entity}")
+    private String typeAliasesPackage;// mybatis扫描实体类
 
-    @Value("${mybatis.mapperLocations2:classpath:com/web/mapper2/*.xml}")
+    @Value("${mybatis.mapperLocations2:classpath:com/*/mapper/*.xml}")
     private String mapperLocations;
 
     @Primary
@@ -44,7 +44,9 @@ public class DataSourceConfig1 {
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
-        // stat是统计SQL，wall是SQL防火墙，防SQL注入的，log4j是用来输出统计数据的
+        dataSource.setMaxActive(10);
+        dataSource.setMinIdle(10);
+        // stat是统计SQL，wall是SQL防火墙，防SQL注入的，slf4j是用来输出统计数据的
         dataSource.setFilters("stat,wall");
         return dataSource;
     }
@@ -75,10 +77,10 @@ public class DataSourceConfig1 {
     }
 
     @Bean
-    @Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    @Scope(value = "prototype")
     public JdkRegexpMethodPointcut jdkRegexpMethodPointcut() {
         JdkRegexpMethodPointcut pointcut = new JdkRegexpMethodPointcut();
-        pointcut.setPatterns("com.web.controller.*", "com.web.service.*");
+        pointcut.setPatterns("com.*.mapper*.*");
         return pointcut;
     }
 

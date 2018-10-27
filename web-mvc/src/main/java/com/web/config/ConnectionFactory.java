@@ -21,9 +21,9 @@ public class ConnectionFactory {
     private ConnectionFactory() {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/aa?useSSL=false&serverTimezone=Asia/Shanghai"); //数据源
-        config.setUsername("root"); //用户名
-        config.setPassword("sa"); //密码
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/aa?useSSL=false&serverTimezone=Asia/Shanghai");
+        config.setUsername("root");
+        config.setPassword("sa");
         config.addDataSourceProperty("cachePrepStmts", true);
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");

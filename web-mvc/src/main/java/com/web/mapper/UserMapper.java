@@ -7,7 +7,7 @@ import java.util.List;
 
 @Repository
 public interface UserMapper {
-    List<User> findAll();
+    List<User> getAdmin();
 
     Boolean insert(User user);
 }

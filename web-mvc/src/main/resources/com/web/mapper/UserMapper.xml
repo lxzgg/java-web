@@ -3,11 +3,12 @@
 <mapper namespace="com.web.mapper.UserMapper">
 
     <select id="getAdmin" resultType="com.web.entity.User">
-    select * from auth_user
-  </select>
+        select * from auth_user
+    </select>
 
     <insert id="insert" parameterType="com.web.entity.User" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO auth_user VALUE(null,#{name},#{username},#{password},#{mobile},#{email},#{status},#{createdAt},#{updatedAt})
+        INSERT INTO auth_user
+        VALUE(null,#{name},#{username},#{password},#{mobile},#{email},#{status},#{createdAt},#{updatedAt})
     </insert>
 
 </mapper>

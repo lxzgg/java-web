@@ -1,8 +1,6 @@
 package com.web.config;
 
-
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,39 +19,39 @@ public class TransactionAdviceConfig {
     @Autowired
     private PlatformTransactionManager transactionManager;
 
-    private static final String AOP_POINTCUT_EXPRESSION = "execution(* com..service..*.*(..))";
-
     @Bean
     public TransactionInterceptor txAdvice() {
         DefaultTransactionAttribute tx_required = new DefaultTransactionAttribute();
         tx_required.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
         DefaultTransactionAttribute tx_required_readOnly = new DefaultTransactionAttribute();
-        tx_required_readOnly.setPropagationBehavior(TransactionDefinition.PROPAGATION_SUPPORTS);
+        tx_required_readOnly.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         tx_required_readOnly.setReadOnly(true);
 
         NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();
         source.addTransactionalMethod("add*", tx_required);
         source.addTransactionalMethod("set*", tx_required);
         source.addTransactionalMethod("put*", tx_required);
+        source.addTransactionalMethod("del*", tx_required);
         source.addTransactionalMethod("save*", tx_required);
         source.addTransactionalMethod("exec*", tx_required);
-        source.addTransactionalMethod("delete*", tx_required);
+        source.addTransactionalMethod("insert*", tx_required);
         source.addTransactionalMethod("update*", tx_required);
         source.addTransactionalMethod("is*", tx_required_readOnly);
-        source.addTransactionalMethod("get*", tx_required);
-        source.addTransactionalMethod("find*", tx_required);
-        source.addTransactionalMethod("list*", tx_required);
-        source.addTransactionalMethod("query*", tx_required);
-        source.addTransactionalMethod("count*", tx_required);
-        source.addTransactionalMethod("select*", tx_required);
+        source.addTransactionalMethod("get*", tx_required_readOnly);
+        source.addTransactionalMethod("find*", tx_required_readOnly);
+        source.addTransactionalMethod("list*", tx_required_readOnly);
+        source.addTransactionalMethod("query*", tx_required_readOnly);
+        source.addTransactionalMethod("count*", tx_required_readOnly);
+        source.addTransactionalMethod("select*", tx_required_readOnly);
         return new TransactionInterceptor(transactionManager, source);
     }
 
     @Bean
-    public Advisor txAdviceAdvisor() {
+    public DefaultPointcutAdvisor txAdviceAdvisor() {
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
-        pointcut.setExpression(AOP_POINTCUT_EXPRESSION);
+        pointcut.setExpression("execution(* com..service..*.*(..))");
         return new DefaultPointcutAdvisor(pointcut, txAdvice());
     }
+
 }

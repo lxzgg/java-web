@@ -3,7 +3,6 @@ package com.web.config;
 import com.web.common.AuthInterceptor;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.MediaType;
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 @Configuration
 @EnableWebMvc
-@EnableAspectJAutoProxy
 @ComponentScan(basePackages = "com.web.controller", useDefaultFilters = false, includeFilters = {@ComponentScan.Filter(Controller.class), @ComponentScan.Filter(RestController.class)})
 public class WebConfig implements WebMvcConfigurer {
 
