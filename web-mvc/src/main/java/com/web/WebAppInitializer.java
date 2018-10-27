@@ -11,7 +11,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
-import java.io.File;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -37,8 +36,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
-        new File("C:/temp").mkdir();
-        registration.setMultipartConfig(new MultipartConfigElement("C:/temp"));
+        registration.setMultipartConfig(new MultipartConfigElement("C:/temp"));// 文件上传临时目录
     }
 
     private CorsFilter corsFilter() {

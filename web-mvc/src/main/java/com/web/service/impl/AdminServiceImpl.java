@@ -4,14 +4,12 @@ import com.web.common.ErrorException;
 import com.web.entity.User;
 import com.web.mapper.UserMapper;
 import com.web.service.AdminService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
 
-@Slf4j
 @Service
 public class AdminServiceImpl implements AdminService {
 
@@ -39,7 +37,6 @@ public class AdminServiceImpl implements AdminService {
 
         Boolean insert = userMapper.insert(user);
         if (true) {
-            log.warn("手动异常");
             throw new ErrorException(10001, "手动异常");
         }
 

@@ -30,7 +30,7 @@ public class DataSourceConfig {
     @Value("${spring.datasource.druid.password}")
     private String password;
 
-    @Value("${mybatis.type-aliases-package:com.*.entity}")
+    @Value("${mybatis.type-aliases-package:com.web.entity}")
     private String typeAliasesPackage;// mybatis扫描实体类
 
     @Value("${mybatis.mapperLocations2:classpath:com/*/mapper/*.xml}")

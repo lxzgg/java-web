@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.mapper.UserMapper">
 
-    <select id="getAdmin" resultType="com.web.entity.User">
+    <select id="getAdmin" resultType="User">
         select * from auth_user
     </select>
 
-    <insert id="insert" parameterType="com.web.entity.User" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO auth_user
         VALUE(null,#{name},#{username},#{password},#{mobile},#{email},#{status},#{createdAt},#{updatedAt})
     </insert>
