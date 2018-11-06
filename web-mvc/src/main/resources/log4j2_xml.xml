@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+
+    <Properties>
+        <Property name="fileSize">50MB</Property>
+        <Property name="filePath">logs</Property>
+        <Property name="filePattern">${filePath}/%d{yyyy-MM}/</Property>
+        <Property name="layoutPattern">%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %pid{-} --- %-40.40logger{39} : %m%n
+        </Property>
+    </Properties>
+
+    <Appenders>
+
+        <JDBC name="JDBC" tableName="application_log">
+            <ConnectionFactory class="com.web.battery.config.ConnectionFactory" method="getConnection"/>
+            <Column name="eventDate" isEventTimestamp="true"/>
+            <Column name="level" pattern="%level"/>
+            <Column name="logger" pattern="%logger"/>
+            <Column name="message" pattern="%message"/>
+        </JDBC>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${layoutPattern}"/>
+        </Console>
+           
+        <RollingRandomAccessFile name="DebugFile" immediateFlush="false"
+                                 fileName="${filePath}/debug.log"
+                                 filePattern="${filePattern}/debug-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${layoutPattern}" charset="UTF-8"/>
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" maxRandomDelay="120" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="${fileSize}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="InfoFile" immediateFlush="false"
+                                 fileName="${filePath}/info.log"
+                                 filePattern="${filePattern}/info-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${layoutPattern}" charset="UTF-8"/>
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" maxRandomDelay="120" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="${fileSize}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="WarnFile" immediateFlush="false"
+                                 fileName="${filePath}/warn.log"
+                                 filePattern="${filePattern}/warn-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${layoutPattern}" charset="UTF-8"/>
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" maxRandomDelay="120" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="${fileSize}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="ErrorFile" immediateFlush="false"
+                                 fileName="${filePath}/error.log"
+                                 filePattern="${filePattern}/error-%d{yyyy-MM-dd}-%i.log.gz">
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="${layoutPattern}" charset="UTF-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" maxRandomDelay="120" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="${fileSize}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingRandomAccessFile>
+
+    </Appenders>
+
+    <Loggers>
+
+        <!--<Logger name="org.springframework" level="INFO"/>-->
+
+        <Root level="INFO">
+            <!--<AppenderRef ref="JDBC" level="INFO"/>-->
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="DebugFile"/>
+            <AppenderRef ref="InfoFile"/>
+            <AppenderRef ref="WarnFile"/>
+            <AppenderRef ref="ErrorFile"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>

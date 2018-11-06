@@ -1,0 +1,188 @@
+name: PropertiesConfig
+##########公共变量##########
+property:
+  append: false
+  fileSize: 50MB
+  filePath: ${web: rootDir}/logs
+  filePattern: ${filePath}/%d{yyyy-MM}/
+  layoutPattern: %d{yyyy-MM-dd HH: mm: ss.SSS} %5p %pid{-} --- %-40.40logger{39}: %m%n
+##########root##########
+rootLogger:
+  level: debug
+  appenderRef:
+    console:
+      ref: STDOUT
+    jdbc:
+      ref: JDBC
+      level: INFO
+    D:
+      ref: DebugFile
+      level: DEBUG
+    I:
+      ref: InfoFile
+      level: INFO
+    W:
+      ref: WarnFile
+      level: WARN
+    E:
+      ref: ErrorFile
+      level: ERROR
+##########logger##########
+logger:
+  spring:
+    name: org.springframework
+    level: INFO
+  HikariPool:
+    name: com.zaxxer
+    level: INFO
+  batis:
+    name: org.apache.ibatis
+    level: INFO
+  mybatis:
+    name: org.mybatis
+    level: INFO
+  boss:
+    name: org.jboss
+    level: INFO
+  Exception:
+    name: org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver
+    level: OFF
+  servlet:
+    name: org.springframework.web.servlet.DispatcherServlet
+    level: WARN
+  DruidDataSource:
+    name: com.alibaba.druid.pool.DruidDataSource
+    level: WARN
+  ContextLoader:
+    name: org.springframework.web.context.ContextLoader
+    level: WARN
+  validator:
+    name: org.hibernate.validator
+    level: WARN
+##########console##########
+appender:
+  console:
+    type: Console
+    name: STDOUT
+    target: SYSTEM_OUT
+    layout.type: PatternLayout
+    layout.pattern: ${layoutPattern}
+    filter.threshold.type: ThresholdFilter
+    filter.threshold.level: debug
+  ##########jdbc##########
+  jdbc:
+    name: JDBC
+    type: JDBC
+    tableName: application_log
+    ConnectionFactory:
+      type: ConnectionFactory
+      class: com.web.config.ConnectionFactory
+      method: getConnection
+    column-1:
+      type: Column
+      name: eventDate
+      isEventTimestamp: true
+    column-2:
+      type: Column
+      name: level
+      pattern: %level
+    column-3:
+      type: Column
+      name: logger
+      pattern: %logger
+    column-4:
+      type: Column
+      name: message
+      pattern: %message
+  ##########debug##########
+  D:
+    name: DebugFile
+    type: RollingRandomAccessFile
+    immediateFlush: false
+    append: ${append}
+    fileName: ${filePath}/debug.log
+    filePattern: ${filePattern}/debug-%d{yyyy-MM-dd}-%i.log.gz
+    layout.type: PatternLayout
+    layout.charset: UTF-8
+    layout.pattern: ${layoutPattern}
+    policies.type: Policies
+    policies.time.type: TimeBasedTriggeringPolicy
+    policies.time.interval: 1
+    policies.time.modulate: true
+    policies.time.maxRandomDelay: 120
+    policies.size.type: SizeBasedTriggeringPolicy
+    policies.size.size: ${fileSize}
+    strategy.type: DefaultRolloverStrategy
+    strategy.max: 100
+    filter.threshold.type: ThresholdFilter
+    filter.threshold.level: INFO
+    filter.threshold.onMatch: DENY
+    filter.threshold.onMismatch: NEUTRAL
+  ##########Info##########
+  I:
+    name: InfoFile
+    type: RollingRandomAccessFile
+    immediateFlush: false
+    append: ${append}
+    fileName: ${filePath}/info.log
+    filePattern: ${filePattern}/info-%d{yyyy-MM-dd}-%i.log.gz
+    layout.type: PatternLayout
+    layout.charset: UTF-8
+    layout.pattern: ${layoutPattern}
+    policies.type: Policies
+    policies.time.type: TimeBasedTriggeringPolicy
+    policies.time.interval: 1
+    policies.time.modulate: true
+    policies.time.maxRandomDelay: 120
+    policies.size.type: SizeBasedTriggeringPolicy
+    policies.size.size: ${fileSize}
+    strategy.type: DefaultRolloverStrategy
+    strategy.max: 100
+    filter.threshold.type: ThresholdFilter
+    filter.threshold.level: WARN
+    filter.threshold.onMatch: DENY
+    filter.threshold.onMismatch: NEUTRAL
+    ##########warn##########
+  W:
+    name: WarnFile
+    type: RollingRandomAccessFile
+    immediateFlush: false
+    append: ${append}
+    fileName: ${filePath}/warn.log
+    filePattern: ${filePattern}/warn-%d{yyyy-MM-dd}-%i.log.gz
+    layout.type: PatternLayout
+    layout.charset: UTF-8
+    layout.pattern: ${layoutPattern}
+    policies.type: Policies
+    policies.time.type: TimeBasedTriggeringPolicy
+    policies.time.interval: 1
+    policies.time.modulate: true
+    policies.time.maxRandomDelay: 120
+    policies.size.type: SizeBasedTriggeringPolicy
+    policies.size.size: ${fileSize}
+    strategy.type: DefaultRolloverStrategy
+    strategy.max: 100
+    filter.threshold.type: ThresholdFilter
+    filter.threshold.level: ERROR
+    filter.threshold.onMatch: DENY
+    filter.threshold.onMismatch: NEUTRAL
+  ##########error##########
+  E:
+    name: ErrorFile
+    type: RollingRandomAccessFile
+    immediateFlush: false
+    append: ${append}
+    fileName: ${filePath}/error.log
+    filePattern: ${filePattern}/error-%d{yyyy-MM-dd}-%i.log.gz
+    layout.type: PatternLayout
+    layout.charset: UTF-8
+    layout.pattern: ${layoutPattern}
+    policies.type: Policies
+    policies.time.type: TimeBasedTriggeringPolicy
+    policies.time.interval: 1
+    policies.time.modulate: true
+    policies.time.maxRandomDelay: 120
+    policies.size.type: SizeBasedTriggeringPolicy
+    policies.size.size: ${fileSize}
+    strategy.type: DefaultRolloverStrategy
+    strategy.max: 100
